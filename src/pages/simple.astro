@@ -7,7 +7,7 @@ import Menu from "../components/Menu.astro";
     <Menu />
     <div id="myplot" class="ml-8"></div>
     <script>
-        import * as Plot from "@observablehq/plot";
+        import * as Plot from "https://cdn.jsdelivr.net/npm/@observablehq/plot@0.6/+esm";
 
         const plot = Plot.rectY(
             { length: 10000 },
