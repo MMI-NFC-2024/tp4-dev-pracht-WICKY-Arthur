@@ -1,0 +1,88 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Menu from "../components/Menu.astro";
+---
+
+<Layout>
+  <Menu />
+  <h1 class="pl-12 pb-8 text-3xl">Penguin filtre</h1>
+  <select class="ml-12 mb-8" name="species" id="species">
+    <option value="">All species</option>
+    <option value="Adelie">Adelie</option>
+    <option value="Chinstrap">Chinstrap</option>
+    <option value="Gentoo">Gentoo</option>
+  </select>
+  <select class="ml-12 mb-8" name="sex" id="sex">
+    <option value="">All sex</option>
+    <option value="MALE">Male</option>
+    <option value="FEMALE">Female</option>
+  </select>
+  <select class="ml-12 mb-8" name="island" id="island">
+    <option value="">All island</option>
+    <option value="Biscoe">Biscoe</option>
+    <option value="Dream">Dream</option>
+    <option value="Torgersen">Torgersen</option>
+  </select>
+  <div id="myplot" class="ml-8"></div>
+
+  <script>
+    // Importe la librairie Plot d'ObservableHQ
+    import * as Plot from "@observablehq/plot";
+    // Importe les données des manchots depuis un fichier JSON
+    import penguins from "../assets/penguins.json";
+
+    // Récupère l'élément select pour choisir l'espèce
+    const selectSpecies = document.getElementById("species");
+    const selectSex = document.getElementById("sex");
+    const selectIsland = document.getElementById("island");
+    // Fonction pour afficher le graphique
+    function renderPlot() {
+      // Récupère l'espèce sélectionnée
+      const species = selectSpecies.value;
+      const sex = selectSex.value;
+      const island = selectIsland.value;
+
+      // Sélectionne la div où le graphique sera affiché
+      const plotDiv = document.getElementById("myplot");
+      // Vide le contenu précédent de la div
+      plotDiv.innerHTML = "";
+      let filteredData = penguins;
+    
+    if (species) {
+      filteredData = filteredData.filter(d => d.species === species);
+    }
+    
+    if (sex) {
+      filteredData = filteredData.filter(d => d.sex === sex);
+    }
+    
+    if (island) {
+      filteredData = filteredData.filter(d => d.island === island);
+    }
+      // Crée le graphique avec Plot
+      const plot = Plot.plot({
+        marks: [
+          // Ajoute les points du graphique, filtrés selon l'espèce choisie
+          Plot.dot(
+            filteredData,
+            {
+              x: "culmen_length_mm", // Axe X : longueur du bec
+              y: "culmen_depth_mm", // Axe Y : profondeur du bec
+              stroke: "species", // Couleur selon l'espèce
+              // Filtre selon l'espèce sélectionnée
+            },
+          ),
+        ],
+      });
+      // Ajoute le graphique à la div
+
+      plotDiv.appendChild(plot);
+    }
+    // Ajoute un écouteur d'événement pour le changement d'espèce (appel 'renderPlot')
+    selectSpecies.addEventListener("change", renderPlot);
+    selectSex.addEventListener("change", renderPlot);
+    selectIsland.addEventListener("change", renderPlot);
+    // Affiche le graphique au chargement de la page
+    renderPlot();
+  </script>
+</Layout>
