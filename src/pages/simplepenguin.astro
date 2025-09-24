@@ -1,11 +1,11 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import Menu from "../components/Menu.astro";
-
 ---
 
 <Layout>
     <Menu />
+    <h1 class="pl-12 pb-8 text-3xl">Simple Penguin</h1>
     <div id="myplot" class="ml-8"></div>
     <script>
         import * as Plot from "@observablehq/plot";
@@ -13,12 +13,13 @@ import Menu from "../components/Menu.astro";
 
         const plot = Plot.plot({
             marks: [
-        Plot.dot(penguins, {
-          x: "culmen_length_mm",
-          y: "culmen_depth_mm",
-          stroke: "species",
-        }),
-      ],});
+                Plot.dot(penguins, {
+                    x: "culmen_length_mm",
+                    y: "culmen_depth_mm",
+                    stroke: "species",
+                }),
+            ],
+        });
         const div = document.querySelector("#myplot");
         div.append(plot);
     </script>

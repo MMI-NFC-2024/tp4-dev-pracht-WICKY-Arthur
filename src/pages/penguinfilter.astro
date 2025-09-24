@@ -1,0 +1,55 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Menu from "../components/Menu.astro";
+---
+
+<Layout>
+  <Menu />
+  <h1 class="pl-12 pb-8 text-3xl">Penguin filtre</h1>
+  <select class="ml-12 mb-8" name="species" id="species">
+    <option value="">All species</option>
+    <option value="Adelie">Adelie</option>
+    <option value="Chinstrap">Chinstrap</option>
+    <option value="Gentoo">Gentoo</option>
+  </select>
+  <div id="myplot" class="ml-8"></div>
+
+  <script>
+    // Importe la librairie Plot d'ObservableHQ
+    import * as Plot from "@observablehq/plot";
+    // Importe les données des manchots depuis un fichier JSON
+    import penguins from "../assets/penguins.json";
+
+    // Récupère l'élément select pour choisir l'espèce
+    const selectSpecies = document.getElementById("species");
+    // Fonction pour afficher le graphique
+    function renderPlot() {
+      // Récupère l'espèce sélectionnée
+      const species = selectSpecies.value;
+
+      // Sélectionne la div où le graphique sera affiché
+      const plotDiv = document.getElementById("myplot");
+      // Vide le contenu précédent de la div
+      plotDiv.innerHTML = "";
+      // Crée le graphique avec Plot
+      const plot = Plot.plot({
+        marks: [
+          // Ajoute les points du graphique, filtrés selon l'espèce choisie
+          Plot.dot(species ? penguins.filter(d => d.species === species): penguins, {
+            x: "culmen_length_mm", // Axe X : longueur du bec
+            y: "culmen_depth_mm", // Axe Y : profondeur du bec
+            stroke: "species", // Couleur selon l'espèce
+            // Filtre selon l'espèce sélectionnée
+          }),
+        ],
+      });
+      // Ajoute le graphique à la div
+
+      plotDiv.appendChild(plot);
+    }
+    // Ajoute un écouteur d'événement pour le changement d'espèce (appel 'renderPlot')
+    selectSpecies.addEventListener("change", renderPlot);
+    // Affiche le graphique au chargement de la page
+    renderPlot();
+  </script>
+</Layout>
