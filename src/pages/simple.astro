@@ -1,0 +1,19 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Menu from "../components/Menu.astro";
+---
+
+<Layout>
+    <Menu />
+    <div id="myplot" class="ml-8"></div>
+    <script>
+        import * as Plot from "@observablehq/plot";
+
+        const plot = Plot.rectY(
+            { length: 10000 },
+            Plot.binX({ y: "count" }, { x: Math.random }),
+        ).plot();
+        const div = document.querySelector("#myplot");
+        div.append(plot);
+    </script>
+</Layout>

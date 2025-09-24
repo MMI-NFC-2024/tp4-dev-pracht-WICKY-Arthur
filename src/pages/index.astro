@@ -3,9 +3,11 @@ import PlotFigure from "../components/PlotFigure.astro";
 import Layout from "../layouts/Layout.astro";
 import * as Plot from "@observablehq/plot";
 import penguins from "../assets/penguins.json";
+import Menu from "../components/Menu.astro";
 ---
 
 <Layout>
+  <Menu />
   <h1 class="text-2xl">Test Astro et Plot (Observablehq)</h1>
   <PlotFigure
     options={{
@@ -18,15 +20,4 @@ import penguins from "../assets/penguins.json";
       ],
     }}
   />
-  <div id="myplot"></div>
-  <script type="module">
-    import * as Plot from "https://cdn.jsdelivr.net/npm/@observablehq/plot@0.6/+esm";
-
-    const plot = Plot.rectY(
-      { length: 10000 },
-      Plot.binX({ y: "count" }, { x: Math.random }),
-    ).plot();
-    const div = document.querySelector("#myplot");
-    div.append(plot);
-  </script>
 </Layout>
